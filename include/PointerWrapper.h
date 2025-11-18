@@ -37,7 +37,12 @@ public:
      * Think about ownership and resource management.
      * Is the default destructor sufficient here?
      */
-    ~PointerWrapper() =default;
+    ~PointerWrapper() {
+        if (ptr != nullptr) { 
+            delete ptr;
+        }
+    }
+    
 
     // ========== COPY OPERATIONS (DELETED) ==========
 
@@ -60,7 +65,10 @@ public:
      * HINT: How should ownership transfer from one wrapper to another?
      * What should happen to the source wrapper after the move?
      */
-    PointerWrapper(PointerWrapper&& other) noexcept {}
+    PointerWrapper(PointerWrapper&& other) noexcept {
+        this->ptr = other.ptr;
+        other.ptr = nullptr;
+    }
 
     /**
      * TODO: Implement move assignment operator
@@ -68,6 +76,12 @@ public:
      * Don't forget about self-assignment!
      */
     PointerWrapper& operator=(PointerWrapper&& other) noexcept {
+        if (this != &other){
+            delete ptr;
+            this->ptr = other.ptr;
+            other.ptr = nullptr;
+        }
+        
         return *this;
     }
 
@@ -80,6 +94,9 @@ public:
      */
 
     T& operator*() const {
+        if (ptr == nullptr){
+            throw std::runtime_error("pointer is null");
+        }
         return *ptr;
     };
 
@@ -89,7 +106,10 @@ public:
      * What safety checks should you perform?
      */
     T* operator->() const {
-        return nullptr;
+        if (ptr == nullptr) {
+            throw std::runtime_error("pointer is null");
+        }
+        return ptr;
     }
 
     /**
@@ -99,7 +119,10 @@ public:
      * @throws std::runtime_error if ptr is null
      */
     T* get() const {
-        return nullptr; // Placeholder
+        if (ptr == nullptr) {
+            throw std::runtime_error("pointer is null");
+        }
+        return ptr;
     }
 
     // ========== OWNERSHIP MANAGEMENT ==========
