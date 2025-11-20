@@ -133,7 +133,9 @@ public:
      * Should the wrapper still own the pointer after calling release()?
      */
     T* release() {
-        return nullptr;
+        T* temp = this-> ptr;
+        ptr = nullptr;
+        return temp;
     }
 
     /**
@@ -142,6 +144,13 @@ public:
      * What should happen to the old pointer?
      */
     void reset(T* new_ptr = nullptr) {
+        if (ptr == new_ptr) {
+            return;
+        }
+        if (ptr != nullptr) {
+            delete ptr;
+        }
+        ptr = new_ptr;
     }
 
     // ========== UTILITY FUNCTIONS ==========
@@ -152,7 +161,7 @@ public:
      * Why might the explicit keyword be important here?
      */
     explicit operator bool() const {
-        return false; //placeholder
+        return ptr != nullptr;
     }
 
     /**
@@ -186,6 +195,7 @@ void swap(PointerWrapper<T>& lhs, PointerWrapper<T>& rhs) noexcept {
     // TODO: Implement global swap function
     // HINT: You can use the member swap function
     //your code here...
+    lhs.swap(rhs);
 }
 
 #endif // POINTERWRAPPER_H
