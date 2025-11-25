@@ -102,6 +102,8 @@ public:
      */
     void get_waveform_copy(double* buffer, size_t buffer_size) const;
     
+    void set_bpm(int new_bpm) { bpm = new_bpm; }
+
     // ========== ACCESSOR FUNCTIONS ==========
     std::string get_title() const { return title; }
     int get_bpm() const { return bpm; }
