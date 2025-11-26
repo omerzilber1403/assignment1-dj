@@ -73,7 +73,7 @@ Playlist& DJLibraryService::getPlaylist() {
  */
 AudioTrack* DJLibraryService::findTrack(const std::string& track_title) {
     // Your implementation here
-    return nullptr; // Placeholder
+    return playlist.find_track(track_title);
 }
 
 void DJLibraryService::loadPlaylistFromIndices(const std::string& playlist_name, 
@@ -109,5 +109,10 @@ void DJLibraryService::loadPlaylistFromIndices(const std::string& playlist_name,
  */
 std::vector<std::string> DJLibraryService::getTrackTitles() const {
     // Your implementation here
-    return std::vector<std::string>(); // Placeholder
+    std::vector<AudioTrack*> tracks = playlist.getTracks();
+    std::vector<std::string> titles;
+    for (int i = 0; i < tracks.size(); i++){
+        titles.push_back(tracks[i]->get_title());
+    }  
+    return titles;
 }
