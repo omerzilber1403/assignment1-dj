@@ -102,7 +102,7 @@
     
     // Editor settings for academic integrity
     "editor.acceptSuggestionOnCommitCharacter": false,
-    "editor.acceptSuggestionOnEnter": "off",
+    "editor.acceptSuggestionOnEnter": "on",
     "editor.tabCompletion": "off",
     "editor.wordBasedSuggestions": "off",
     "editor.suggest.showWords": false,

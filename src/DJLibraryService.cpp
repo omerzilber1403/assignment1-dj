@@ -15,8 +15,27 @@ DJLibraryService::DJLibraryService(const Playlist& playlist)
  */
 void DJLibraryService::buildLibrary(const std::vector<SessionConfig::TrackInfo>& library_tracks) {
     //Todo: Implement buildLibrary method
-    std::cout << "TODO: Implement DJLibraryService::buildLibrary method\n"<< library_tracks.size() << " tracks to be loaded into library.\n";
+    for (int i = 0; i < library_tracks.size(); i++){
+        std:: string type = library_tracks[i].type;
+        AudioTrack* new_track = nullptr;
+        if (type == "MP3"){
+            new_track = new MP3Track(library_tracks[i].title,library_tracks[i].artists,
+            library_tracks[i].duration_seconds,library_tracks[i].bpm,
+            library_tracks[i].extra_param1,library_tracks[i].extra_param2);
+            std::cout << "MP3Track created: " << library_tracks[i].extra_param1 << " kbps \n";
+        }  
+        else {
+            new_track = new WAVTrack(library_tracks[i].title,library_tracks[i].artists,
+            library_tracks[i].duration_seconds,library_tracks[i].bpm,
+            library_tracks[i].extra_param1,library_tracks[i].extra_param2);
+            std::cout << "WAVTrack created: " << library_tracks[i].extra_param1 << "Hz/" << library_tracks[i].extra_param2 << "bit \n";
+        }
+        this->library.push_back(new_track);  
+    }
+    std::cout << "[INFO] Track library built: " << this->library.size() << " tracks loaded \n";
 }
+    
+
 
 /**
  * @brief Display the current state of the DJ library playlist
@@ -60,9 +79,29 @@ AudioTrack* DJLibraryService::findTrack(const std::string& track_title) {
 void DJLibraryService::loadPlaylistFromIndices(const std::string& playlist_name, 
                                                const std::vector<int>& track_indices) {
     // Your implementation here
-    // For now, add a placeholder to fix the linker error
-    (void)playlist_name;  // Suppress unused parameter warning
-    (void)track_indices;  // Suppress unused parameter warning
+    std::cout << "[INFO] Loading playlist: " << playlist_name  <<"\n";
+    playlist = Playlist(playlist_name);
+    for (int i = 0; i < track_indices.size() ; i++) {
+        int index = track_indices[i];
+        if (index <= library.size() && index > 0) {
+           AudioTrack* to_insert = library[index -1] ; 
+           PointerWrapper<AudioTrack> new_track_wrapper = to_insert->clone();
+           AudioTrack* new_track = new_track_wrapper.release();
+           if (!new_track) {
+            std::cout << " [ERROR] Cloned track return null. \n";
+           }
+           else {
+                new_track->load();
+                new_track->analyze_beatgrid();
+                playlist.add_track(new_track);
+                std::cout << "Added " << new_track->get_title() << " to playlist " << playlist_name << "\n";
+           }
+        }
+        else {
+            std::cout << "[WARNING] Invalid track index: " << std::to_string(index) << "\n";
+        }
+    }
+    std::cout << "[INFO] Playlist Loaded: " << playlist_name << "( " << playlist.get_track_count() << " tracks) \n";
 }
 /**
  * TODO: Implement getTrackTitles method
