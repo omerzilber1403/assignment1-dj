@@ -9,6 +9,16 @@
 
 DJLibraryService::DJLibraryService(const Playlist& playlist) 
     : playlist(playlist) {}
+
+
+DJLibraryService::~DJLibraryService() {
+    for (AudioTrack* t : library) {
+        delete t;
+    }
+    library.clear();
+}
+
+
 /**
  * @brief Load a playlist from track indices referencing the library
  * @param library_tracks Vector of track info from config
