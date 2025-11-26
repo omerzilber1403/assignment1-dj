@@ -63,8 +63,27 @@ bool DJSession::load_playlist(const std::string& playlist_name)  {
 
  */
 int DJSession::load_track_to_controller(const std::string& track_name) {
-    // Your implementation here
-    return 0; // Placeholder
+    // Your implementation 
+     AudioTrack* track = library_service.findTrack(track_name);
+     if (! track) {
+        std::cout << "[ERROR] Track: \"" << track_name << "\" not found in library \n";
+        stats.errors++;
+        return 0;
+     }
+     std:: cout << "[System] Loading track '" << track_name << "' to controller... \n";
+     int cache_return_value = controller_service.loadTrackToCache(*track);
+     if (cache_return_value == 1){
+        stats.cache_hits++;
+     }
+     else if (cache_return_value == 0){
+        stats.cache_misses++;
+     }
+     else {
+        stats.cache_misses++;
+        stats.cache_evictions++;        
+     }
+     return cache_return_value;
+
 }
 
 /**
@@ -76,7 +95,26 @@ int DJSession::load_track_to_controller(const std::string& track_name) {
 bool DJSession::load_track_to_mixer_deck(const std::string& track_title) {
     std::cout << "[System] Delegating track transfer to MixingEngineService for: " << track_title << std::endl;
     // your implementation here
-    return false; // Placeholder
+    AudioTrack* track = controller_service.getTrackFromCache(track_title);
+    if (!track) {
+        std::cout << "[ERROR] Track: \"" << track_title << "\" not found in cache\n";
+        stats.errors++;
+        return false;
+    }
+    int result = mixing_service.loadTrackToDeck(*track);
+    if (result == 0) {
+        stats.deck_loads_a++;
+        stats.transitions++;
+        return true;
+    }
+    else if (result == 1) {
+        stats.deck_loads_b++;
+        stats.transitions++;
+        return true;
+    }
+    std::cout << "[ERROR] Failed to load track \"" << track_title << "\" into deck\n";
+    stats.errors++;
+    return false;
 }
 
 /**
@@ -109,6 +147,67 @@ void DJSession::simulate_dj_performance() {
 
     std::cout << "TODO: Implement the DJ performance simulation workflow here." << std::endl;
     // Your implementation here
+    std::vector<std::string> playlist_names;
+    if (play_all) {
+        for (const auto& pair : session_config.playlists) {
+            playlist_names.push_back(pair.first);
+        }
+        std::sort(playlist_names.begin(), playlist_names.end());
+
+        for (std::string& playlist_name: playlist_names) {
+            if (!load_playlist(playlist_name)) {
+                    std::cout << "[ERROR] Failed to load playlist '" << playlist_name << "'\n";
+                    stats.errors++;
+                    continue;
+            }
+            for (const std::string& track_title : track_titles) {
+                std::cout << "\n-- Processing: " << track_title << " --\n";
+                stats.tracks_processed++;
+                load_track_to_controller(track_title);
+                if (!load_track_to_mixer_deck(track_title)) {
+                    continue;
+                }
+            }
+            print_session_summary();
+            stats.tracks_processed = 0;
+            stats.cache_hits = 0;
+            stats.cache_evictions = 0;
+            stats.cache_misses = 0;
+            stats.deck_loads_a = 0;
+            stats.deck_loads_b = 0;
+            stats.transitions = 0;
+            stats.errors = 0;
+        }
+    }
+    else {
+        while (true) {
+            std::string playlist_name = display_playlist_menu_from_config();
+            if (playlist_name.empty()) break; 
+            if (!load_playlist(playlist_name)) {
+                std::cout << "[ERROR] Failed to load playlist '" << playlist_name << "'\n";
+                stats.errors++;
+                continue;
+            }
+            for (const std::string& track_title : track_titles) {
+                std::cout << "\n-- Processing: " << track_title << " --\n";
+                stats.tracks_processed++;
+                load_track_to_controller(track_title);
+                if (!load_track_to_mixer_deck(track_title)) {
+                    continue;
+                }
+            }
+            print_session_summary();
+            stats.tracks_processed = 0;
+            stats.cache_hits = 0;
+            stats.cache_evictions = 0;
+            stats.cache_misses = 0;
+            stats.deck_loads_a = 0;
+            stats.deck_loads_b = 0;
+            stats.transitions = 0;
+            stats.errors = 0;
+        }
+    }
+    std::cout << "Session cancelled by user or all playlists played. \n";
 }
 
 
@@ -166,6 +265,7 @@ std::string DJSession::display_playlist_menu_from_config() {
         
         if (!std::getline(std::cin, input)) {
             std::cout << "\n[ERROR] Input error. Cancelling session." << std::endl;
+            stats.errors++;
             return "";
         }
         
