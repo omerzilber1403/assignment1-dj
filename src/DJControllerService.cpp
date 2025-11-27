@@ -31,12 +31,6 @@ int DJControllerService::loadTrackToCache(AudioTrack& track) {
     } else {
         return 0;
     }    
-
-
-
-
-
-
     return 0; 
 }
 

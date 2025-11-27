@@ -2,9 +2,11 @@
 #include "SessionFileParser.h"
 #include "MP3Track.h"
 #include "WAVTrack.h"
+#include "PointerWrapper.h"
 #include <iostream>
 #include <memory>
 #include <filesystem>
+
 
 
 DJLibraryService::DJLibraryService(const Playlist& playlist) 
