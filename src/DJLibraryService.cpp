@@ -25,7 +25,7 @@ DJLibraryService::~DJLibraryService() {
  */
 void DJLibraryService::buildLibrary(const std::vector<SessionConfig::TrackInfo>& library_tracks) {
     //Todo: Implement buildLibrary method
-    for (int i = 0; i < library_tracks.size(); i++){
+    for (size_t i = 0; i < library_tracks.size(); i++){
         std:: string type = library_tracks[i].type;
         AudioTrack* new_track = nullptr;
         if (type == "MP3"){
@@ -91,9 +91,9 @@ void DJLibraryService::loadPlaylistFromIndices(const std::string& playlist_name,
     // Your implementation here
     std::cout << "[INFO] Loading playlist: " << playlist_name  <<"\n";
     playlist = Playlist(playlist_name);
-    for (int i = 0; i < track_indices.size() ; i++) {
+    for (size_t i = 0; i < track_indices.size() ; i++) {
         int index = track_indices[i];
-        if (index <= library.size() && index > 0) {
+        if (static_cast<size_t>(index) <= library.size() && index > 0) {
            AudioTrack* to_insert = library[index -1] ; 
            PointerWrapper<AudioTrack> new_track_wrapper = to_insert->clone();
            AudioTrack* new_track = new_track_wrapper.release();
@@ -121,7 +121,7 @@ std::vector<std::string> DJLibraryService::getTrackTitles() const {
     // Your implementation here
     std::vector<AudioTrack*> tracks = playlist.getTracks();
     std::vector<std::string> titles;
-    for (int i = 0; i < tracks.size(); i++){
+    for (size_t i = 0; i < tracks.size(); i++){
         titles.push_back(tracks[i]->get_title());
     }  
     return titles;
