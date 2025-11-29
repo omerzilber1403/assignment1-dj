@@ -7,10 +7,8 @@
 #include <memory>
 #include <filesystem>
 
-
-
 DJLibraryService::DJLibraryService(const Playlist& playlist) 
-    : playlist(playlist) {}
+    : playlist(playlist), library() {}
 
 
 DJLibraryService::~DJLibraryService() {
