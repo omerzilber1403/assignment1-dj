@@ -49,8 +49,8 @@ int MixingEngineService::loadTrackToDeck(const AudioTrack& track) {
         delete decks[target_deck];
         decks[target_deck] = nullptr;
     }
-    track_pointer.get()->load();
-    track_pointer.get()->analyze_beatgrid();
+    track_pointer->load();
+    track_pointer->analyze_beatgrid();
     if (decks[active_deck] && auto_sync && !can_mix_tracks(track_pointer)) {
         sync_bpm(track_pointer);
     }

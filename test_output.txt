@@ -36,7 +36,6 @@ Track count: 1
 
 Cleaning up...
 Destroying playlist: Chill House Mix
-AudioTrack destructor called for: Sunset Lover
 Phase 1 test complete. Check for memory leaks!
 
 
@@ -134,4 +133,3 @@ AudioTrack destructor called for: MP3 Example
 AudioTrack destructor called for: WAV Example
 
 (Set 'run_software' to true in main.cpp to run the full interactive session.)
-
