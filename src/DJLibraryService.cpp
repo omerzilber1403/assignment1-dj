@@ -32,13 +32,11 @@ void DJLibraryService::buildLibrary(const std::vector<SessionConfig::TrackInfo>&
             new_track = new MP3Track(library_tracks[i].title,library_tracks[i].artists,
             library_tracks[i].duration_seconds,library_tracks[i].bpm,
             library_tracks[i].extra_param1,library_tracks[i].extra_param2);
-            std::cout << "MP3Track created: " << library_tracks[i].extra_param1 << " kbps \n";
         }  
         else {
             new_track = new WAVTrack(library_tracks[i].title,library_tracks[i].artists,
             library_tracks[i].duration_seconds,library_tracks[i].bpm,
             library_tracks[i].extra_param1,library_tracks[i].extra_param2);
-            std::cout << "WAVTrack created: " << library_tracks[i].extra_param1 << "Hz/" << library_tracks[i].extra_param2 << "bit \n";
         }
         this->library.push_back(new_track);  
     }
@@ -104,14 +102,13 @@ void DJLibraryService::loadPlaylistFromIndices(const std::string& playlist_name,
                 new_track->load();
                 new_track->analyze_beatgrid();
                 playlist.add_track(new_track);
-                std::cout << "Added " << new_track->get_title() << " to playlist " << playlist_name << "\n";
            }
         }
         else {
             std::cout << "[WARNING] Invalid track index: " << std::to_string(index) << "\n";
         }
     }
-    std::cout << "[INFO] Playlist Loaded: " << playlist_name << "( " << playlist.get_track_count() << " tracks) \n";
+    std::cout << "[INFO] Playlist Loaded: " << playlist_name << " (" << playlist.get_track_count() << " tracks) \n";
 }
 /**
  * TODO: Implement getTrackTitles method

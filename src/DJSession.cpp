@@ -178,14 +178,8 @@ void DJSession::simulate_dj_performance() {
                 }
             }
             print_session_summary();
-            stats.tracks_processed = 0;
-            stats.cache_hits = 0;
-            stats.cache_evictions = 0;
-            stats.cache_misses = 0;
-            stats.deck_loads_a = 0;
-            stats.deck_loads_b = 0;
-            stats.transitions = 0;
-            stats.errors = 0;
+            controller_service.displayCacheStatus();
+            mixing_service.displayDeckStatus();
         }
     }
     else {
@@ -206,14 +200,7 @@ void DJSession::simulate_dj_performance() {
                 }
             }
             print_session_summary();
-            stats.tracks_processed = 0;
-            stats.cache_hits = 0;
-            stats.cache_evictions = 0;
-            stats.cache_misses = 0;
-            stats.deck_loads_a = 0;
-            stats.deck_loads_b = 0;
-            stats.transitions = 0;
-            stats.errors = 0;
+            mixing_service.displayDeckStatus();
         }
     }
     std::cout << "Session cancelled by user or all playlists played. \n";

@@ -15,7 +15,7 @@ void WAVTrack::load() {
     // NOTE: Use exactly 2 spaces before the arrow (→) character
 
     std::cout << "[WAVTrack::load] Loading WAV: \"" << title
-    << "\" at " <<sample_rate<< "Hz/ " << bit_depth <<" bit (uncompressed)...\n";
+    << "\" at " <<sample_rate<< "Hz/" << bit_depth <<"bit (uncompressed)...\n";
     long size = duration_seconds * sample_rate * (bit_depth / 8) * 2;
     std::cout << "  → Estimated file size: " << size <<" bytes \n";
     std::cout << "  → Fast loading due to uncompressed format. \n";
@@ -30,7 +30,7 @@ void WAVTrack::analyze_beatgrid() {
     // 3. Print number of beats and mention uncompressed precision
     // should print "  → Estimated beats: <beats>  → Precision factor: 1.0 (uncompressed audio)"
     double beats = (duration_seconds / 60.0) * bpm;
-    std::cout << "  → Estimated beats: " << beats <<"\n";
+    std::cout << "  → Estimated beats: " << beats;
     std::cout << "  → Precision factor: 1 (uncompressed audio) \n";
 }
 
