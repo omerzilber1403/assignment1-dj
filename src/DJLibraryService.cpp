@@ -119,7 +119,7 @@ std::vector<std::string> DJLibraryService::getTrackTitles() const {
     std::vector<AudioTrack*> tracks = playlist.getTracks();
     std::vector<std::string> titles;
     for (size_t i = 0; i < tracks.size(); i++){
-        titles.push_back(tracks[i]->get_title());
+        titles.insert(titles.begin(), tracks[i]->get_title()); // שינוי: הוספה בתחילת הווקטור
     }  
     return titles;
 }
