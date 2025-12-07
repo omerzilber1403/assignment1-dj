@@ -75,11 +75,11 @@ int DJSession::load_track_to_controller(const std::string& track_name) {
     // Your implementation 
      AudioTrack* track = library_service.findTrack(track_name);
      if (! track) {
-        std::cout << "[ERROR] Track: \"" << track_name << "\" not found in library \n";
+        std::cout << "[ERROR] Track: \"" << track_name << "\" not found in library\n";
         stats.errors++;
         return 0;
      }
-     std:: cout << "[System] Loading track '" << track_name << "' to controller... \n";
+     std:: cout << "[System] Loading track '" << track_name << "' to controller...\n";
      int cache_return_value = controller_service.loadTrackToCache(*track);
      if (cache_return_value == 1){
         stats.cache_hits++;
@@ -170,16 +170,16 @@ void DJSession::simulate_dj_performance() {
                     continue;
             }
             for (const std::string& track_title : track_titles) {
-                std::cout << "\n-- Processing: " << track_title << " --\n";
+                std::cout << "\n--- Processing: " << track_title << " ---\n";
                 stats.tracks_processed++;
                 load_track_to_controller(track_title);
+                controller_service.displayCacheStatus();
                 if (!load_track_to_mixer_deck(track_title)) {
                     continue;
                 }
+                mixing_service.displayDeckStatus();
             }
             print_session_summary();
-            controller_service.displayCacheStatus();
-            mixing_service.displayDeckStatus();
         }
     }
     else {
@@ -198,12 +198,12 @@ void DJSession::simulate_dj_performance() {
                 if (!load_track_to_mixer_deck(track_title)) {
                     continue;
                 }
+                print_session_summary();
+                mixing_service.displayDeckStatus();
             }
-            print_session_summary();
-            mixing_service.displayDeckStatus();
         }
     }
-    std::cout << "Session cancelled by user or all playlists played. \n";
+    std::cout << "Session cancelled by user or all playlists played.\n";
 }
 
 

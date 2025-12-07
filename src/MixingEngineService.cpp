@@ -56,11 +56,6 @@ int MixingEngineService::loadTrackToDeck(const AudioTrack& track) {
     }
     decks[target_deck] = track_pointer.release();
     std:: cout << " [Load Complete] '" << decks[target_deck]->get_title() << "' is now loaded on deck " << std::to_string(target_deck) << "\n";
-    if ( decks[active_deck] ) {
-        std:: cout << " [Unload] Unloading previous deck " << std::to_string(active_deck) << " (" << decks[active_deck]->get_title() << ")\n";
-        delete decks[active_deck];
-        decks[active_deck] = nullptr;
-    }
     active_deck = target_deck;
     std:: cout << " [Active Deck] Switched to deck " << std::to_string(active_deck) << "\n";
     return target_deck;

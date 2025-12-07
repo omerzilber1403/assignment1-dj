@@ -40,7 +40,7 @@ void DJLibraryService::buildLibrary(const std::vector<SessionConfig::TrackInfo>&
         }
         this->library.push_back(new_track);  
     }
-    std::cout << "[INFO] Track library built: " << this->library.size() << " tracks loaded \n";
+    std::cout << "[INFO] Track library built: " << this->library.size() << " tracks loaded\n";
 }
     
 
@@ -96,7 +96,7 @@ void DJLibraryService::loadPlaylistFromIndices(const std::string& playlist_name,
            PointerWrapper<AudioTrack> new_track_wrapper = to_insert->clone();
            AudioTrack* new_track = new_track_wrapper.release();
            if (!new_track) {
-            std::cout << " [ERROR] Cloned track return null. \n";
+            std::cout << " [ERROR] Cloned track return null.\n";
            }
            else {
                 new_track->load();
@@ -108,7 +108,7 @@ void DJLibraryService::loadPlaylistFromIndices(const std::string& playlist_name,
             std::cout << "[WARNING] Invalid track index: " << std::to_string(index) << "\n";
         }
     }
-    std::cout << "[INFO] Playlist Loaded: " << playlist_name << " (" << playlist.get_track_count() << " tracks) \n";
+    std::cout << "[INFO] Playlist loaded: " << playlist_name << " (" << playlist.get_track_count() << " tracks)\n";
 }
 /**
  * TODO: Implement getTrackTitles method
