@@ -51,7 +51,10 @@ int MixingEngineService::loadTrackToDeck(const AudioTrack& track) {
     }
     track_pointer->load();
     track_pointer->analyze_beatgrid();
-    if (decks[active_deck] && auto_sync && !can_mix_tracks(track_pointer)) {
+    if (!decks[active_deck]) {
+        std::cout << "[Sync BPM] Cannot sync - one of the decks is empty." << std::endl;
+    }
+    else if (decks[active_deck] && auto_sync && !can_mix_tracks(track_pointer)) {
         sync_bpm(track_pointer);
     }
     decks[target_deck] = track_pointer.release();
